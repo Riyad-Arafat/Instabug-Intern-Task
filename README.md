@@ -1,5 +1,9 @@
 # Instabug-Intern-Task
 
+## Deployed
+
+# https://instabug-task-da0f5.web.app/
+
 ## Project setup
 
 ```
