@@ -12,11 +12,11 @@ const guestRoutes = [
 const routes = [
   ...guestRoutes,
 
-  // {
-  //   path: "/",
-  //   name: "Wellecome",
-  //   component: Wellcome,
-  // },
+  {
+    path: "/",
+    name: "Wellecome",
+    component: () => import("../views/Login.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -26,10 +26,11 @@ const router = createRouter({
 
 // // Authentication Guard
 router.beforeEach((to, from, next) => {
-  const isAuthed = localStorage.getItem("email") ? true : false;
+  const token = localStorage.getItem("email");
   const isRoutePublic = guestRoutes.some((route) => route.name === to.name);
   document.title = "Instabug | " + to.name;
-  if (!isRoutePublic && !isAuthed) next({ name: "Login" });
+  if (!isRoutePublic && !token) next({ name: "Login", path: "/login" });
+  if (isRoutePublic && token) next({ name: "Wellecome", path: "/" });
   else next();
 });
 
