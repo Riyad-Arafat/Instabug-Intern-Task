@@ -25,7 +25,6 @@ export default {
 $btn-color: #00287a;
 .btn {
   position: relative;
-  width: 100%;
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 6px;

@@ -41,8 +41,13 @@ export default {
   props: {
     images: Array,
   },
+  data() {
+    return {
+      autoPlay: () => {},
+    };
+  },
   mounted() {
-    setInterval(function () {
+    this.autoPlay = setInterval(function () {
       const allitems = document.querySelectorAll(".slider .pagination .item");
       let index;
       allitems.forEach((i, inx) => {
@@ -57,6 +62,12 @@ export default {
       }
     }, 5000);
   },
+
+  unmounted() {
+    clearInterval(this.autoPlay);
+    this.autoPlay = () => {};
+  },
+
   methods: {
     pagination: (index) => pagination(index),
   },

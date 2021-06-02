@@ -78,6 +78,7 @@ export default {
   methods: {
     validate: function () {
       this.validInputs = false;
+      this.alert = "";
       let email = document.getElementsByName("email");
       let password = document.getElementsByName("password");
       let validPassword = false;
@@ -165,11 +166,12 @@ export default {
   }
 
   .alert {
-    background-color: #f30000;
+    background-color: #ff2424f2;
     color: #fff;
-    padding: 20px;
+    padding: 12px 0;
     font-size: 20px;
-    border-radius: 3px;
+    margin-bottom: 16px;
+    border-radius: 5px;
   }
   .logo {
     margin-top: 50px;
@@ -196,6 +198,9 @@ export default {
   }
   .inputs-form {
     width: 70%;
+    .btn {
+      width: 100%;
+    }
     .others {
       display: flex;
       justify-content: space-between;
