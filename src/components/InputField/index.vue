@@ -24,7 +24,7 @@
         @click="showPassword()"
       ></i>
     </div>
-    <span class="alert">{{ alert }}</span>
+    <span class="alert" :id="name + '-alert'">{{ alert }}</span>
   </div>
 </template>
 

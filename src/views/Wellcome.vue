@@ -4,7 +4,12 @@
       Welcome <span>{{ userEmail }} </span> to our website
     </h2>
     <div class="logout">
-      <Button title="LogOut" titleColor="#fff" @click="logOut" />
+      <Button
+        title="LogOut"
+        id="logout-btn"
+        titleColor="#fff"
+        @click="logOut"
+      />
     </div>
   </div>
 </template>

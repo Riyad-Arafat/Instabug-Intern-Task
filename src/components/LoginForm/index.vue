@@ -19,18 +19,18 @@
         bg="#31323a"
         iconColor="#fff"
       />
-      <Button title="click" icon="microsoft" bg="#fff" />
+      <Button title="Microsoft" icon="microsoft" bg="#fff" />
     </div>
     <span class="separator">OR</span>
     <form class="inputs-form" @submit.prevent="onSubmit()" action="#">
-      <div v-if="alert" class="alert">{{ alert }}</div>
+      <div v-if="alert" id="alert">{{ alert }}</div>
 
       <InputField
         type="email"
         name="email"
         placeholder="you@company.com"
         label="Work Email"
-        @change="validate()"
+        @change="validateEmail()"
         :alert="emailAlert"
       />
       <InputField
@@ -38,14 +38,15 @@
         name="password"
         placeholder="8+ Characters"
         label="password"
-        @change="validate()"
+        @change="validatePassword()"
         :alert="passwordAlert"
       />
       <Button
+        id="login-btn"
         title="Log in"
         titleColor="#fff"
-        :bg="validInputs ? '' : 'gray'"
-        :disabled="!validInputs"
+        :bg="validateEmail && validPassword ? '' : 'gray'"
+        :disabled="!validEmail || !validPassword"
       />
       <div class="others">
         <span>Don't have an account? <a href="#">Sign up</a></span>
@@ -66,6 +67,8 @@ export default {
   },
   data() {
     return {
+      validEmail: false,
+      validPassword: false,
       validInputs: false,
       passwordAlert: "",
       emailAlert: "",
@@ -76,53 +79,62 @@ export default {
   },
 
   methods: {
-    validate: function () {
-      this.validInputs = false;
+    validateEmail: function () {
       this.alert = "";
       let email = document.getElementsByName("email");
-      let password = document.getElementsByName("password");
-      let validPassword = false;
-      let validEmail = false;
       email = email[0].value;
+
+      let emailRehex = new RegExp(
+        /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
+      );
+      if (!emailRehex.test(email)) {
+        this.emailAlert = "Enter a vaild address";
+        this.validEmail = false;
+      } else {
+        this.emailAlert = "";
+        this.validEmail = true;
+      }
+
+      if (this.validEmail) {
+        this.emailAlert = "";
+        this.email = email;
+      }
+    },
+    validatePassword: function () {
+      this.alert = "";
+      let password = document.getElementsByName("password");
+
       password = password[0].value;
       let passwordRegex = new RegExp(
         /^(?=.*[0-9])(?=.*[A-Z])[a-zA-Z0-9-!@#$%^&*()_-~?><:}{+=.,]{8,}$/
       );
-      let emailRehex = new RegExp(
-        /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
-      );
+
       let addresName = "";
-      if (!emailRehex.test(email)) {
-        this.emailAlert = "Enter a vaild address";
-      } else {
-        validEmail = true;
-      }
-      if (password.length) {
-        addresName = email.substring(0, email.indexOf("@"));
+
+      if (password.length > 0 && this.email) {
+        addresName = this.email.substring(0, this.email.indexOf("@"));
         var re = new RegExp(addresName, "g");
         let passwordValid = password.match(re);
-
         if (
           Array.isArray(passwordValid) &&
           passwordValid.length > 0 &&
-          emailRehex.test(email)
+          this.email
         ) {
           this.passwordAlert =
             "password shouldn’t contain the email address name";
+          this.validPassword = false;
         } else if (!passwordRegex.test(password)) {
           this.passwordAlert =
             "The password must contain at least 1 uppercase letters and one number";
+          this.validPassword = false;
         } else {
-          validPassword = true;
+          this.validPassword = true;
         }
-      } else {
+      } else if (!password.length > 0 && this.validEmail) {
         this.passwordAlert = "password must be 8 characters or more";
       }
-      if (validPassword && validEmail) {
-        this.validInputs = true;
+      if (this.validPassword) {
         this.passwordAlert = "";
-        this.emailAlert = "";
-        this.email = email;
         this.password = password;
       }
     },
@@ -165,7 +177,7 @@ export default {
     width: 100%;
   }
 
-  .alert {
+  #alert {
     background-color: #ff2424f2;
     color: #fff;
     padding: 12px 0;
